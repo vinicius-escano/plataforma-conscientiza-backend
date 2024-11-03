@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.platcon.model.Registry;
+import com.platcon.model.dto.DataDTO;
 import com.platcon.repository.RegistryRepository;
+import com.platcon.service.impl.RegistryServiceImpl;
 
 @RestController
 @RequestMapping("/api/registries")
@@ -23,6 +25,9 @@ public class RegistryController {
 
     @Autowired
     private RegistryRepository registryRepository;
+    
+    @Autowired
+    private RegistryServiceImpl registryService;
 
     @PostMapping
     public Registry criarRegistro(@RequestBody Registry registro) {
@@ -39,6 +44,11 @@ public class RegistryController {
         return registryRepository.findById(id)
                 .map(registro -> ResponseEntity.ok().body(registro))
                 .orElse(ResponseEntity.notFound().build());
+    }
+    
+    @GetMapping("/listAll")
+    public DataDTO buscarTodosRegistro() {
+        return registryService.findAll();
     }
 
     @PutMapping("/{id}")
